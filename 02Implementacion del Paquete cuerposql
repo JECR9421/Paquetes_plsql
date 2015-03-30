@@ -1,0 +1,36 @@
+CREATE PACKAGE BODY PKG_CONTABILIDAD IS
+ FUNCTION fn_Obtener_Saldo(codigo_cuenta VARCHAR2) 
+ RETURN NUMBER 
+ IS
+   saldo NUMBER;
+ BEGIN
+        SELECT SALDO INTO saldo
+        FROM SALDOS
+        WHERE CO_CUENTA = codigo_cuenta;
+        return (saldo);
+ END;
+ 
+ PROCEDURE Contabilizar(mes VARCHAR2) 
+ IS
+   CURSOR cDatos(vmes VARCHAR2) 
+   IS
+   SELECT * 
+   FROM FACTURACION 
+   WHERE FX_FACTURACION = vmes 
+     AND PENDIENTE_CONTABILIZAR = 'S';
+ 
+   fila cDatos%ROWTYPE;
+ 
+ BEGIN
+   OPEN cDatos(mes); 
+     LOOP FETCH cDatos INTO fila; 
+     EXIT WHEN cDatos%NOTFOUND;
+     /* Procesamiento de los registros recuperados */
+     END LOOP; 
+   CLOSE cDatos;
+ 
+ EXCEPTION
+ WHEN OTHERS THEN 
+   RAISE ERROR_CONTABILIZAR;
+ END Contabilizar;
+END PKG_CONTABILIDAD; 

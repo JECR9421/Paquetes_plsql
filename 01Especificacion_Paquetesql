@@ -1,0 +1,20 @@
+CREATE OR REPLACE PACKAGE PKG_CONTABILIDAD 
+IS
+   
+  -- Declaraciones de tipos y registros públicas
+  TYPE Cuenta_contable IS RECORD
+  (
+    codigo_cuenta VARCHAR2(6),
+    naturaleza    VARCHAR2(2) ,
+    actividad     VARCHAR2(4) , 
+    debe_haber    VARCHAR2(1)
+  );
+  
+  -- Declaraciones de variables y constantes publicas
+  DEBE  CONSTANT VARCHAR2(1) := 'D';
+  HABER CONSTANT VARCHAR2(1) := 'D';
+  ERROR_CONTABILIZAR EXCEPTION;
+  -- Declaraciones de procedimientos y funciones públicas
+  PROCEDURE Contabilizar (mes VARCHAR2) ;
+  FUNCTION  fn_Obtener_Saldo(codigo_cuenta VARCHAR2) RETURN NUMBER;
+END PKG_CONTABILIDAD;
